@@ -43,8 +43,6 @@ public class rep_grafos {
 
     isOnSecond = false;
 
-    //System.out.println(numVertices + " " + numArestas);
-
     int[][] matrizDeAdjacencia = new int[numVertices][numVertices];
 
     for (int i = 0; i < numVertices; i++) {
@@ -78,7 +76,7 @@ public class rep_grafos {
       currentPointed = Integer.parseInt(auxSecond);
       auxFirst = "";
       auxSecond = "";
-      if (matrizDeAdjacencia[currentPointing-1][currentPointed-1] == 0) {
+      if (matrizDeAdjacencia[currentPointing-1][currentPointed-1] == 0) { //popula o grafo com 1s no lugar de 0s nos vertices adjacentes
         matrizDeAdjacencia[currentPointing-1][currentPointed-1] = 1;
       }
     }
