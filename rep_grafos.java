@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class rep_grafo {
+public class rep_grafos {
 
   public static void main(String[] args) throws Exception {
     Scanner sc = new Scanner(System.in);
@@ -43,16 +43,24 @@ public class rep_grafo {
 
     isOnSecond = false;
 
-    System.out.println(numVertices + " " + numArestas);
+    //System.out.println(numVertices + " " + numArestas);
 
-    int[][] matrizdeIncidencia = new int[numVertices][numArestas];
-    
+    int[][] matrizDeAdjacencia = new int[numVertices][numVertices];
+
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++) {
+            matrizDeAdjacencia[i][j] = 0;
+        }
+    }
+
+
+
     Iterator<String> iterator = listaGrafo.iterator(); //cria um iterator da lista de inputs
     int currentPointing = 0, currentPointed = 0;
     String auxFirst = "";
     String auxSecond = "";
-    int arestaIndex = 0;
-    while (iterator.hasNext()) { // while loop que para no fim da lista de inputs
+
+    while (iterator.hasNext()) {
       String currentAresta = iterator.next();
       isOnSecond = false;
       currentPointing = 0;
@@ -70,16 +78,9 @@ public class rep_grafo {
       currentPointed = Integer.parseInt(auxSecond);
       auxFirst = "";
       auxSecond = "";
-      for (int i = 0; i < numVertices; i++) { //preenche a coluna da aresta de acordo com a incidencia
-        if (i + 1 == currentPointing) {
-          matrizdeIncidencia[i][arestaIndex] = -1;
-        } else if (i + 1 == currentPointed) {
-          matrizdeIncidencia[i][arestaIndex] = 1;
-        } else {
-          matrizdeIncidencia[i][arestaIndex] = 0;
-        }
+      if (matrizDeAdjacencia[currentPointing-1][currentPointed-1] == 0) {
+        matrizDeAdjacencia[currentPointing-1][currentPointed-1] = 1;
       }
-      arestaIndex += 1;
     }
 
     System.out.println("\n\n\n\n\n\n\n\n\n");
@@ -89,32 +90,25 @@ public class rep_grafo {
     int grauDeEntrada = 0;
     ArrayList<Integer> conjSucessores = new ArrayList<Integer>();
     ArrayList<Integer> conjPredecessores = new ArrayList<Integer>();
-    
 
-    for (int i = 0; i < numArestas; i++) {
-        if (matrizdeIncidencia[insertedVertice-1][i] == -1) {
-            grauDeSaida += 1;
-            for (int j = 0; j < numVertices; j++) {
-                if (matrizdeIncidencia[j][i] == 1) {// busca o vertice conectado, iterando pela aresta.
-                    conjSucessores.add(j+1);
-                }
-            }
-        }
-        if (matrizdeIncidencia[insertedVertice-1][i] == 1) {
-            grauDeEntrada += 1;
-            for (int j = 0; j < numVertices; j++) {
-                if (matrizdeIncidencia[j][i] == -1) {// busca o vertice conectado, da mesma forma que a função acima
-                    conjPredecessores.add(j+1);
-                }
-            }
-        }
+    for (int i = 0; i < numVertices; i++) {
+      if (matrizDeAdjacencia[insertedVertice - 1][i] == 1) {
+        grauDeSaida += 1;
+        conjSucessores.add(i+1); 
+      }
+    }
+
+    for (int i = 0; i < numVertices; i++) {
+      if (matrizDeAdjacencia[i][insertedVertice-1] == 1) {
+        grauDeEntrada += 1;
+        conjPredecessores.add(i+1); 
+      }
     }
 
     System.out.println("1) GRAU DE SAIDA: " + grauDeSaida);
     System.out.println("2) GRAU DE ENTRADA: " + grauDeEntrada);
     System.out.println("3) CONJUNTO DE SUCESSORES: " + conjSucessores);
     System.out.println("4) CONJUNTO DE PREDECESSORES: " + conjPredecessores);
-    
 
     sc.close();
     br.close();
